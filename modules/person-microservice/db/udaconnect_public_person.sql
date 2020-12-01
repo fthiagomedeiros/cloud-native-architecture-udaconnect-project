@@ -3,4 +3,4 @@ insert into public.person (id, first_name, last_name, company_name) values (6, '
 insert into public.person (id, first_name, last_name, company_name) values (1, 'Pam', 'Trexler', 'Hampton, Hampton and McQuill');
 insert into public.person (id, first_name, last_name, company_name) values (8, 'Paul', 'Badman', 'Paul Badman & Associates');
 insert into public.person (id, first_name, last_name, company_name) values (9, 'Otto', 'Spring', 'The Chicken Sisters Restaurant');
-insert into public.person (id, first_name, last_name, company_name) values (2, 'Francisco', 'Medeiros', 'My Personal Company');
+insert into public.person (id, first_name, last_name, company_name) values (10, 'Francisco', 'Thiago', 'My Personal Company');
