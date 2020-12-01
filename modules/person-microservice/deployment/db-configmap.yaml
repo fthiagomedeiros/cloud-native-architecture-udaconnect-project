@@ -3,7 +3,7 @@ kind: ConfigMap
 data:
   DB_USERNAME: "ct_person"
   DB_NAME: "person"
-  DB_HOST: "person-db"
+  DB_HOST: "postgres-person"
   DB_PORT: "5432"
 metadata:
   name: db-person-map
