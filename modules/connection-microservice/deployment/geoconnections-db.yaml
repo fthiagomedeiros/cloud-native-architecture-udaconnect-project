@@ -65,22 +65,22 @@ spec:
           - name: POSTGRES_USER
             valueFrom:
               configMapKeyRef:
-                name: db-env
+                name: db-geoconnections-map
                 key: DB_USERNAME
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: db-secret
+                name: db-geoconnections-secret
                 key: DB_PASSWORD
           - name: POSTGRES_DB
             valueFrom:
               configMapKeyRef:
-                name: db-env
+                name: db-geoconnections-map
                 key: DB_NAME
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: postgresdb
+            - mountPath: /var/lib/geoconnectionsdb/data
+              name: geoconnections-db
       volumes:
-        - name: postgresdb
+        - name: geoconnections-db
           persistentVolumeClaim:
             claimName: postgres-geoconnections-pv-claim
