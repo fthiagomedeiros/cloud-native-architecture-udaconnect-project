@@ -10,6 +10,10 @@ import coordinates_event_pb2_grpc
 
 kafka_url = os.environ["KAFKA_URL"]
 kafka_topic = os.environ["KAFKA_TOPIC"]
+
+print('Kafka URL', kafka_url)
+print('Kafka topic', kafka_topic)
+
 producer = KafkaProducer(bootstrap_servers=kafka_url)
 
 
@@ -22,6 +26,9 @@ class CoordinatesEventServicer(coordinates_event_pb2_grpc.ItemServiceServicer):
             'latitude': int(request.latitude),
             'longitude': int(request.longitude)
         }
+
+        print('processed_entity', request_value)
+
         user_encode_data = json.dumps(request_value, indent=2).encode('utf-8')
         producer.send(kafka_topic, user_encode_data)
         return coordinates_event_pb2.EventCoordinatesMessage(**request_value)
