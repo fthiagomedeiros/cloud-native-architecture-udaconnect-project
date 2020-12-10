@@ -14,9 +14,9 @@ stub = coordinates_event_pb2_grpc.ItemServiceStub(channel)
 
 # Update this with desired payload
 user_coordinates = coordinates_event_pb2.EventCoordinatesMessage(
-    userId=1920,
-    latitude=1000,
-    longitude=1001
+    userId=10,
+    latitude=-122,
+    longitude=37
 )
 
 response = stub.Create(user_coordinates)
