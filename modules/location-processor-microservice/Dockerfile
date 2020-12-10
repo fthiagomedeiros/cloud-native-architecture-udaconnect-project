@@ -5,7 +5,5 @@ WORKDIR .
 COPY . .
 RUN pip install -r requirements.txt
 
-EXPOSE 5005
-
 COPY . .
-CMD ["python", "grpc_server_startup.py"]
+CMD ["python", "location_processor_service.py"]
