@@ -9,7 +9,7 @@ KAFKA_TOPIC = os.environ["KAFKA_TOPIC"]
 print('KAFKA URL ' + KAFKA_URL)
 print('started listening topic ' + KAFKA_TOPIC)
 
-consumer = KafkaConsumer(KAFKA_TOPIC)
+consumer = KafkaConsumer(KAFKA_TOPIC, bootstrap_servers=[KAFKA_URL])
 
 
 def save_in_db(_location):

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 data:
-  KAFKA_URL: "http://127.0.0.1:9092"
-  KAFKA_TOPIC: "coordinates-events-topic"
+  KAFKA_URL: my-release-kafka-0.my-release-kafka-headless.default.svc.cluster.local:9092
+  KAFKA_TOPIC: coordinates-events-topic
 metadata:
   name: config-location-processor-map

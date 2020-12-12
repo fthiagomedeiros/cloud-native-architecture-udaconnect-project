@@ -8,8 +8,8 @@ spec:
   ports:
   - name: "5000"
     port: 5000
-    targetPort: 5000
-    nodePort: 30003
+    targetPort: 5005
+    nodePort: 30004
   selector:
     service: location-processor-api
   type: NodePort
@@ -24,14 +24,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      service: location-event-api
+      service: location-processor-api
   template:
     metadata:
       labels:
-        service: location-event-api
+        service: location-processor-api
     spec:
       containers:
-      - image: fthiagomedeiros/location-processor-service:latest
+      - image: fthiagomedeiros/location-processor-service-api:latest
         name: location-processor-container
         imagePullPolicy: Always
         env:
