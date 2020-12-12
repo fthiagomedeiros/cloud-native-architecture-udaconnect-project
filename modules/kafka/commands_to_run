@@ -2,7 +2,7 @@ Please, run the following commands in order
 
 1. helm repo add bitnami https://charts.bitnami.com/bitnami
 
-2. helm install my-release bitnami/kafka
+2. helm install kafka-release bitnami/kafka
 
 OUTPUT
 ------------------------
