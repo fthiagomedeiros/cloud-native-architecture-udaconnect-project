@@ -9,14 +9,14 @@ Simulates user mobiles sending coordinates to gRPC
 
 print("Coordinates sent...")
 
-channel = grpc.insecure_channel("localhost:5005")
+channel = grpc.insecure_channel("127.0.0.1:30003")
 stub = coordinates_event_pb2_grpc.ItemServiceStub(channel)
 
-for i in range(10):
+for i in range(3):
     # Update this with desired payload
     user_coordinates = coordinates_event_pb2.EventCoordinatesMessage(
         userId=i,
-        latitude=-122,
+        latitude=-10,
         longitude=37
     )
 
