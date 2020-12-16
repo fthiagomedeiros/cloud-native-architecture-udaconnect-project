@@ -8,8 +8,7 @@ spec:
   ports:
   - name: "5000"
     port: 5000
-    targetPort: 5005
-    nodePort: 30004
+    targetPort: 5000
   selector:
     service: location-processor-api
   type: NodePort
@@ -45,4 +44,6 @@ spec:
             configMapKeyRef:
               name: config-location-processor-map
               key: KAFKA_TOPIC
+        - name: PYTHONUNBUFFERED
+          value: '0'
       restartPolicy: Always

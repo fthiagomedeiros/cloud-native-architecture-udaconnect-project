@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 EXPOSE 5005
 
 COPY . .
-CMD ["python", "grpc_server_startup.py"]
+ENTRYPOINT ["python", "grpc_server_startup.py"]
