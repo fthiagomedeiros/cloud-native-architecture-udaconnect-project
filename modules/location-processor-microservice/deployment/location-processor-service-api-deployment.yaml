@@ -6,9 +6,9 @@ metadata:
   name: location-processor-api
 spec:
   ports:
-  - name: "5000"
-    port: 5000
-    targetPort: 5000
+  - name: "9092"
+    port: 9092
+    targetPort: 9092
   selector:
     service: location-processor-api
   type: NodePort
@@ -34,6 +34,31 @@ spec:
         name: location-processor-container
         imagePullPolicy: Always
         env:
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-geoconnections-map
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-geoconnections-secret
+              key: DB_PASSWORD
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-geoconnections-map
+              key: DB_NAME
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: db-geoconnections-map
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: db-geoconnections-map
+              key: DB_PORT
         - name: KAFKA_URL
           valueFrom:
             configMapKeyRef:
