@@ -80,6 +80,10 @@ Each microservice is located into the root directory, more specifically into the
 
 Deploy each microservice in the following order:
 
+####SETTING UP A KAFKA
+1. install helm
+
+
 ####PERSON-MICROSERVICE
 1. Get into the 'person-microservice' folder and run `kubectl apply -f deployment/`
 2. after you have the pods running, execute the script into `person-microservice/scripts/run_db_command.sh` with the pod identifier
@@ -92,9 +96,7 @@ Deploy each microservice in the following order:
 2. after you have the pods running, execute the script into person-microservice/scripts/run_db_command.sh with the pod identifier
     `sh /connection-microservice/scripts/run_db_command.sh <POSTGRES_DB_POD_NAME>`. 
    The step 2 will populate the postgres database
-3. Access the `http://localhost:30002/api/persons/6/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5` for testing 
-
-####SETTING UP A KAFKA
+3. Access the `http://localhost:30002/api/persons/6/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5` for testing
 
 
 ### Verifying it Works
