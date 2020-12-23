@@ -82,14 +82,14 @@ Each microservice is located into the root directory, more specifically into the
 Deploy each microservice in the following order:
 
 #### SETTING UP A KAFKA
-1. After the connection to your K3s cluster, verify it is working successfully typing in command-line and you'll see output as below:
+**1. After the connection to your K3s cluster, verify it is working successfully typing in command-line and you'll see output as below:**
 ```shell
-kubectl get svc
+$ kubectl get svc
 
 NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
 kubernetes   ClusterIP   10.43.0.1    <none>        443/TCP   9m50s
 ```
-2. Once you have Helm ready, you can add the chart repository below.
+**2. Once you have Helm ready, you can add the chart repository below.**
 ```shell
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 
@@ -98,11 +98,47 @@ $ helm repo list
 NAME        	URL                                           
 bitnami     	https://charts.bitnami.com/bitnami            
 ```
-3. Install the kafka helm chart
+**3. Install the kafka helm chart**
 ```shell
 $ helm install kafka-release bitnami/kafka           
-```
 
+You'll see an output like that.
+
+NAME: kafka-release
+LAST DEPLOYED: Wed Dec 23 19:33:16 2020
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+** Please be patient while the chart is being deployed **
+
+Kafka can be accessed by consumers via port 9092 on the following DNS name from within your cluster:
+
+    kafka-release.default.svc.cluster.local
+
+Each Kafka broker can be accessed by producers via port 9092 on the following DNS name(s) from within your cluster:
+
+    kafka-release-0.kafka-release-headless.default.svc.cluster.local:9092
+
+To create a pod that you can use as a Kafka client run the following commands:
+
+    kubectl run kafka-release-client --restart='Never' --image docker.io/bitnami/kafka:2.6.0-debian-10-r106 --namespace default --command -- sleep infinity
+    kubectl exec --tty -i kafka-release-client --namespace default -- bash
+
+    PRODUCER:
+        kafka-console-producer.sh \
+            
+            --broker-list kafka-release-0.kafka-release-headless.default.svc.cluster.local:9092 \
+            --topic test
+
+    CONSUMER:
+        kafka-console-consumer.sh \
+            
+            --bootstrap-server kafka-release.default.svc.cluster.local:9092 \
+            --topic test \
+            --from-beginning
+```
 
 #### PERSON-MICROSERVICE
 1. Get into the 'person-microservice' folder and run `kubectl apply -f deployment/`
