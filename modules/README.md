@@ -29,7 +29,7 @@ We will be installing the tools that we'll need to use for getting our environme
 3. [Set up `kubectl`](https://rancher.com/docs/rancher/v2.x/en/cluster-admin/cluster-access/kubectl/)
 4. [Install VirtualBox](https://www.virtualbox.org/wiki/Downloads) with at least version 6.0
 5. [Install Vagrant](https://www.vagrantup.com/docs/installation) with at least version 2.0
-6. [Helm](https://helm.sh/docs/intro/quickstart/) with at least version 3.2.1
+6. **[Helm](https://helm.sh/docs/intro/quickstart/) with at least version 3.2.1**
 
 ### Environment Setup
 To run the application, you will need a K8s cluster running locally and to interface with it via `kubectl`. We will be using Vagrant with VirtualBox to run K3s.
@@ -81,18 +81,37 @@ Each microservice is located into the root directory, more specifically into the
 
 Deploy each microservice in the following order:
 
-####SETTING UP A KAFKA
-1. install helm
+#### SETTING UP A KAFKA
+1. After the connection to your K3s cluster, verify it is working successfully typing in command-line and you'll see output as below:
+```shell
+kubectl get svc
+
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.43.0.1    <none>        443/TCP   9m50s
+```
+2. Once you have Helm ready, you can add the chart repository below.
+```shell
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+
+$ helm repo list
+
+NAME        	URL                                           
+bitnami     	https://charts.bitnami.com/bitnami            
+```
+3. Install the kafka helm chart
+```shell
+$ helm install kafka-release bitnami/kafka           
+```
 
 
-####PERSON-MICROSERVICE
+#### PERSON-MICROSERVICE
 1. Get into the 'person-microservice' folder and run `kubectl apply -f deployment/`
 2. after you have the pods running, execute the script into `person-microservice/scripts/run_db_command.sh` with the pod identifier
     `sh /person-microservice/scripts/run_db_command.sh <POSTGRES_DB_POD_NAME>`. 
    The step 2 will populate the postgres database
 3. Access the http://localhost:30001/api/persons for testing   
 
-####CONNECTION-MICROSERVICE
+#### CONNECTION-MICROSERVICE
 1. Get into the 'connection-microservice' folder and run `kubectl apply -f deployment/`.
 2. after you have the pods running, execute the script into person-microservice/scripts/run_db_command.sh with the pod identifier
     `sh /connection-microservice/scripts/run_db_command.sh <POSTGRES_DB_POD_NAME>`. 
