@@ -29,6 +29,7 @@ We will be installing the tools that we'll need to use for getting our environme
 3. [Set up `kubectl`](https://rancher.com/docs/rancher/v2.x/en/cluster-admin/cluster-access/kubectl/)
 4. [Install VirtualBox](https://www.virtualbox.org/wiki/Downloads) with at least version 6.0
 5. [Install Vagrant](https://www.vagrantup.com/docs/installation) with at least version 2.0
+6. **[Helm](https://helm.sh/docs/intro/quickstart/) with at least version 3.2.1**
 
 ### Environment Setup
 To run the application, you will need a K8s cluster running locally and to interface with it via `kubectl`. We will be using Vagrant with VirtualBox to run K3s.
@@ -76,26 +77,106 @@ Type `exit` to exit the virtual OS and you will find yourself back in your compu
 Afterwards, you can test that `kubectl` works by running a command like `kubectl describe services`. It should not return any errors.
 
 ### Steps
-1. `kubectl apply -f deployment/db-configmap.yaml` - Set up environment variables for the pods
-2. `kubectl apply -f deployment/db-secret.yaml` - Set up secrets for the pods
-3. `kubectl apply -f deployment/postgres.yaml` - Set up a Postgres database running PostGIS
-4. `kubectl apply -f deployment/udaconnect-api` - Set up the service and deployment for the API
-5. `kubectl apply -f deployment/udaconnect-app` - Set up the service and deployment for the web app
-6. `sh scripts/run_db_command.sh <POD_NAME>` - Seed your database against the `postgres` pod. (`kubectl get pods` will give you the `POD_NAME`)
+Each microservice is located into the root directory, more specifically into the modules folder
 
-Manually applying each of the individual `yaml` files is cumbersome but going through each step provides some context on the content of the starter project. In practice, we would have reduced the number of steps by running the command against a directory to apply of the contents: `kubectl apply -f deployment/`.
+Deploy each microservice in the following order:
 
-Note: The first time you run this project, you will need to seed the database with dummy data. Use the command `sh scripts/run_db_command.sh <POD_NAME>` against the `postgres` pod. (`kubectl get pods` will give you the `POD_NAME`). Subsequent runs of `kubectl apply` for making changes to deployments or services shouldn't require you to seed the database again!
+#### SETTING UP A KAFKA
+**1. After the connection to your K3s cluster, verify it is working successfully typing in command-line and you'll see output as below:**
+```shell
+$ kubectl get svc
+
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.43.0.1    <none>        443/TCP   9m50s
+```
+**2. Once you have Helm ready, you can add the chart repository below.**
+```shell
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+
+$ helm repo list
+
+NAME        	URL                                           
+bitnami     	https://charts.bitnami.com/bitnami            
+```
+**3. Install the kafka helm chart**
+```shell
+$ helm install kafka-release bitnami/kafka           
+
+You'll see an output like that.
+
+NAME: kafka-release
+LAST DEPLOYED: Wed Dec 23 19:33:16 2020
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+...
+```
+
+**4. After a while, check that kafka is running inside Kubernetes cluster entering the commands below:
+
+```shell
+$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+kafka-release-zookeeper-0   1/1     Running   0          7m30s
+kafka-release-0             1/1     Running   1          7m30s
+
+$ kubectl get svc
+NAME                               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
+kubernetes                         ClusterIP   10.43.0.1      <none>        443/TCP                      26m
+kafka-release-headless             ClusterIP   None           <none>        9092/TCP,9093/TCP            7m35s
+kafka-release-zookeeper-headless   ClusterIP   None           <none>        2181/TCP,2888/TCP,3888/TCP   7m35s
+kafka-release-zookeeper            ClusterIP   10.43.24.145   <none>        2181/TCP,2888/TCP,3888/TCP   7m34s
+kafka-release                      ClusterIP   10.43.63.37    <none>        9092/TCP                     7m34s
+```
+
+Now, you will be able to deploy the services.
+For a better understanding, check the architectural diagram
+![alt text](https://raw.githubusercontent.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/development/docs/architecture_design.png "Architectural Diagram")
+
+#### PERSON-MICROSERVICE
+1. Get into the '01-person-microservice' folder and run `$ kubectl apply -f deployment/`
+2. after you have the pods running, execute the script into `person-microservice/scripts/run_db_command.sh` with the pod identifier
+    `sh /person-microservice/scripts/run_db_command.sh <POSTGRES_DB_POD_NAME>`. 
+   The step 2 will populate the postgres database
+3. Access the http://localhost:30001/api/persons for testing   
+
+#### CONNECTION-MICROSERVICE
+1. Get into the '02-connection-microservice' folder and run `$ kubectl apply -f deployment/`
+2. after you have the pods running, execute the script into person-microservice/scripts/run_db_command.sh with the pod identifier
+    `sh /connection-microservice/scripts/run_db_command.sh <POSTGRES_DB_POD_NAME>`. 
+   The step 2 will populate the postgres database
+3. Access the `http://localhost:30002/api/persons/600/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5` for testing
+4. You will not see any response once we have no records yet into database
+
+#### LOCATION-EVENT-MICROSERVICE
+1. Get into the '03-location-event-microservice' folder and run `$ kubectl apply -f deployment/
+
+#### LOCATION-PROCESSOR-MICROSERVICE
+1. Get into the '04-location-processor-microservice' folder and run `$ kubectl apply -f deployment/
+
+#### FRONTEND
+1. Get into the '05-frontend' folder and run `$ kubectl apply -f deployment/
+
+Wait until you have every pod running and access the http://localhost:30000/
+You will see the image below.
+
+![alt text](https://raw.githubusercontent.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/development/docs/frontend.png "Frontend")
+
 
 ### Verifying it Works
-Once the project is up and running, you should be able to see 3 deployments and 3 services in Kubernetes:
+Once the project is up and running, you should be able to send requests to grpc location-event-microservice
 `kubectl get pods` and `kubectl get services` - should both return `udaconnect-app`, `udaconnect-api`, and `postgres`
 
-
 These pages should also load on your web browser:
-* `http://localhost:30001/` - OpenAPI Documentation
-* `http://localhost:30001/api/` - Base path for API
+* `http://localhost:30002/` - OpenAPI Documentation
+* `http://localhost:30002/api/persons/1/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5`
+* `http://localhost:30001/api/persons` - Base path for person microservice API
 * `http://localhost:30000/` - Frontend ReactJS Application
+
+To send records, please execute the python file for location-event-microservice
+[grpc-client](https://github.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/blob/development/modules/03-location-event-microservice/location-event-client-grpc.py)
 
 #### Deployment Note
 You may notice the odd port numbers being served to `localhost`. [By default, Kubernetes services are only exposed to one another in an internal network](https://kubernetes.io/docs/concepts/services-networking/service/). This means that `udaconnect-app` and `udaconnect-api` can talk to one another. For us to connect to the cluster as an "outsider", we need to a way to expose these services to `localhost`.
