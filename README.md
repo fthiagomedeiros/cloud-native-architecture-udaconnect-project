@@ -82,14 +82,8 @@ Each microservice is located into the root directory, more specifically into the
 Deploy each microservice in the following order:
 
 #### SETTING UP A KAFKA
-**1. After the connection to your K3s cluster, verify it is working successfully typing in command-line and you'll see output as below:**
-```shell
-$ kubectl get svc
 
-NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
-kubernetes   ClusterIP   10.43.0.1    <none>        443/TCP   9m50s
-```
-**2. Once you have Helm ready, you can add the chart repository below.**
+**1. Now, you can add the chart repository below.**
 ```shell
 $ helm repo add bitnami https://charts.bitnami.com/bitnami
 
@@ -98,7 +92,8 @@ $ helm repo list
 NAME        	URL                                           
 bitnami     	https://charts.bitnami.com/bitnami            
 ```
-**3. Install the kafka helm chart**
+
+**2. Install the kafka helm chart**
 ```shell
 $ helm install kafka-release bitnami/kafka           
 
@@ -114,26 +109,18 @@ NOTES:
 ...
 ```
 
-**4. After a while, check that kafka is running inside Kubernetes cluster entering the commands below:**
+**3. After a while, check that kafka is running inside Kubernetes cluster entering the commands below:**
 
 ```shell
 $ kubectl get pods
 NAME                        READY   STATUS    RESTARTS   AGE
 kafka-release-zookeeper-0   1/1     Running   0          7m30s
 kafka-release-0             1/1     Running   1          7m30s
-
-$ kubectl get svc
-NAME                               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
-kubernetes                         ClusterIP   10.43.0.1      <none>        443/TCP                      26m
-kafka-release-headless             ClusterIP   None           <none>        9092/TCP,9093/TCP            7m35s
-kafka-release-zookeeper-headless   ClusterIP   None           <none>        2181/TCP,2888/TCP,3888/TCP   7m35s
-kafka-release-zookeeper            ClusterIP   10.43.24.145   <none>        2181/TCP,2888/TCP,3888/TCP   7m34s
-kafka-release                      ClusterIP   10.43.63.37    <none>        9092/TCP                     7m34s
 ```
 
 Now, you will be able to deploy the services.
 For a better understanding, check the architectural diagram
-![alt text](https://raw.githubusercontent.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/development/docs/architecture_design.png "Architectural Diagram")
+![alt text](https://raw.githubusercontent.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/development/docs/architecture_design.png "Architectural Diagram -  Now you have set up a Kafka component.")
 
 #### PERSON-MICROSERVICE
 1. Get into the '01-person-microservice' folder and run `$ kubectl apply -f deployment/`
