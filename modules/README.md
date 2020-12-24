@@ -111,34 +111,29 @@ STATUS: deployed
 REVISION: 1
 TEST SUITE: None
 NOTES:
-** Please be patient while the chart is being deployed **
-
-Kafka can be accessed by consumers via port 9092 on the following DNS name from within your cluster:
-
-    kafka-release.default.svc.cluster.local
-
-Each Kafka broker can be accessed by producers via port 9092 on the following DNS name(s) from within your cluster:
-
-    kafka-release-0.kafka-release-headless.default.svc.cluster.local:9092
-
-To create a pod that you can use as a Kafka client run the following commands:
-
-    kubectl run kafka-release-client --restart='Never' --image docker.io/bitnami/kafka:2.6.0-debian-10-r106 --namespace default --command -- sleep infinity
-    kubectl exec --tty -i kafka-release-client --namespace default -- bash
-
-    PRODUCER:
-        kafka-console-producer.sh \
-            
-            --broker-list kafka-release-0.kafka-release-headless.default.svc.cluster.local:9092 \
-            --topic test
-
-    CONSUMER:
-        kafka-console-consumer.sh \
-            
-            --bootstrap-server kafka-release.default.svc.cluster.local:9092 \
-            --topic test \
-            --from-beginning
+...
 ```
+
+**4. After a while, check that kafka is running inside Kubernetes cluster entering the commands below:
+
+```shell
+$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+kafka-release-zookeeper-0   1/1     Running   0          7m30s
+kafka-release-0             1/1     Running   1          7m30s
+
+$ kubectl get svc
+NAME                               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
+kubernetes                         ClusterIP   10.43.0.1      <none>        443/TCP                      26m
+kafka-release-headless             ClusterIP   None           <none>        9092/TCP,9093/TCP            7m35s
+kafka-release-zookeeper-headless   ClusterIP   None           <none>        2181/TCP,2888/TCP,3888/TCP   7m35s
+kafka-release-zookeeper            ClusterIP   10.43.24.145   <none>        2181/TCP,2888/TCP,3888/TCP   7m34s
+kafka-release                      ClusterIP   10.43.63.37    <none>        9092/TCP                     7m34s
+```
+
+Now, you will be able to deploy the services.
+For a better understanding, check the architectural diagram
+![alt text](https://raw.githubusercontent.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/development/docs/architecture_design.png "Architectural Diagram")
 
 #### PERSON-MICROSERVICE
 1. Get into the 'person-microservice' folder and run `kubectl apply -f deployment/`
