@@ -1,0 +1,139 @@
+---
+openapi: 3.0.0
+info:
+  title: Person Endpoints
+  description: This is a person API from Udacity
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/Virtus5/Company/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: http://localhost:30001/
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+paths:
+  /api/persons:
+    get:
+      tags:
+      - company financial report
+      summary: searches financial reporter by ticker and quartely
+      description: |
+        By passing in the appropriate options, you can search for
+        available companies in the system
+      operationId: getAllPersons
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+        "400":
+          description: bad input parameter
+        "404":
+          description: company not found
+    post:
+      tags:
+      - gets persons information
+      summary: searches financial reporter by ticker and quartely
+      description: |
+        By passing in the appropriate options, you can search for
+        available companies in the system
+      operationId: createPerson
+      requestBody:
+        description: Optional description in *Markdown*
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonNoId'
+        required: true
+      responses:
+        "201":
+          description: created new person
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+        "400":
+          description: bad input parameter
+        "404":
+          description: company not found
+  /api/persons/{personId}:
+    get:
+      tags:
+      - company financial report
+      summary: searches financial reporter by ticker and quartely
+      description: |
+        By passing in the appropriate options, you can search for
+        available companies in the system
+      operationId: getPersonById
+      parameters:
+      - name: personId
+        in: path
+        description: Numeric ID of the user to get
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+        "400":
+          description: bad input parameter
+        "404":
+          description: company not found
+components:
+  schemas:
+    Person:
+      required:
+      - company_name
+      - first_name
+      - id
+      - last_name
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        first_name:
+          type: string
+          example: Francisco
+        last_name:
+          type: string
+          example: Medeiros
+        company_name:
+          type: string
+          example: SelfEmployed
+    PersonNoId:
+      required:
+      - company_name
+      - first_name
+      - last_name
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Francisco
+        last_name:
+          type: string
+          example: Medeiros
+        company_name:
+          type: string
+          example: Virtus
