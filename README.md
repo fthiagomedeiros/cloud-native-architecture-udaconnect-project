@@ -114,7 +114,7 @@ NOTES:
 ...
 ```
 
-**4. After a while, check that kafka is running inside Kubernetes cluster entering the commands below:
+**4. After a while, check that kafka is running inside Kubernetes cluster entering the commands below:**
 
 ```shell
 $ kubectl get pods
