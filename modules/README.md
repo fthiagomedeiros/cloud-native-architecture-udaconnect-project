@@ -166,14 +166,17 @@ You will see the image below.
 
 
 ### Verifying it Works
-Once the project is up and running, you should be able to see 3 deployments and 3 services in Kubernetes:
+Once the project is up and running, you should be able to send requests to grpc location-event-microservice
 `kubectl get pods` and `kubectl get services` - should both return `udaconnect-app`, `udaconnect-api`, and `postgres`
 
-
 These pages should also load on your web browser:
-* `http://localhost:30001/` - OpenAPI Documentation
-* `http://localhost:30001/api/` - Base path for API
+* `http://localhost:30002/` - OpenAPI Documentation
+* `http://localhost:30002/api/persons/1/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5`
+* `http://localhost:30001/api/persons` - Base path for person microservice API
 * `http://localhost:30000/` - Frontend ReactJS Application
+
+To send records, please execute the python file for location-event-microservice
+[grpc-client](https://github.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/blob/development/modules/03-location-event-microservice/location-event-client-grpc.py)
 
 #### Deployment Note
 You may notice the odd port numbers being served to `localhost`. [By default, Kubernetes services are only exposed to one another in an internal network](https://kubernetes.io/docs/concepts/services-networking/service/). This means that `udaconnect-app` and `udaconnect-api` can talk to one another. For us to connect to the cluster as an "outsider", we need to a way to expose these services to `localhost`.
