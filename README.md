@@ -129,7 +129,7 @@ For a better understanding, check the architectural diagram
    The step 2 will populate the postgres database **_(The pod name should be something like (postgres-person-xxxxxid-pod))_**
 3. Access the http://localhost:30001/api/persons for testing
 
-![alt text](https://github.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/blob/master/docs/pods-database-scripts.png "See database script")
+![alt text](https://github.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/blob/master/docs/person-pod-db-script-execution.png "See database script")
 
 #### CONNECTION-MICROSERVICE
 1. Get into the '02-connection-microservice' folder and run `$ kubectl apply -f deployment/`
