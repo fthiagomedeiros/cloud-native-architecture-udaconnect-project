@@ -136,18 +136,30 @@ For a better understanding, check the architectural diagram
 ![alt text](https://raw.githubusercontent.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/development/docs/architecture_design.png "Architectural Diagram")
 
 #### PERSON-MICROSERVICE
-1. Get into the 'person-microservice' folder and run `kubectl apply -f deployment/`
+1. Get into the '01-person-microservice' folder and run `$ kubectl apply -f deployment/`
 2. after you have the pods running, execute the script into `person-microservice/scripts/run_db_command.sh` with the pod identifier
     `sh /person-microservice/scripts/run_db_command.sh <POSTGRES_DB_POD_NAME>`. 
    The step 2 will populate the postgres database
 3. Access the http://localhost:30001/api/persons for testing   
 
 #### CONNECTION-MICROSERVICE
-1. Get into the 'connection-microservice' folder and run `kubectl apply -f deployment/`.
+1. Get into the '02-connection-microservice' folder and run `$ kubectl apply -f deployment/`
 2. after you have the pods running, execute the script into person-microservice/scripts/run_db_command.sh with the pod identifier
     `sh /connection-microservice/scripts/run_db_command.sh <POSTGRES_DB_POD_NAME>`. 
    The step 2 will populate the postgres database
-3. Access the `http://localhost:30002/api/persons/6/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5` for testing
+3. Access the `http://localhost:30002/api/persons/600/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5` for testing
+4. You will not see any response once we have no records yet into database
+
+#### LOCATION-EVENT-MICROSERVICE
+1. Get into the '03-location-event-microservice' folder and run `$ kubectl apply -f deployment/
+
+#### LOCATION-PROCESSOR-MICROSERVICE
+1. Get into the '04-location-processor-microservice' folder and run `$ kubectl apply -f deployment/
+
+#### FRONTEND
+1. Get into the '05-frontend' folder and run `$ kubectl apply -f deployment/
+
+Wait until you have every pod running and access the http://localhost:30000/
 
 
 ### Verifying it Works
