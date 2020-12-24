@@ -160,6 +160,9 @@ For a better understanding, check the architectural diagram
 1. Get into the '05-frontend' folder and run `$ kubectl apply -f deployment/
 
 Wait until you have every pod running and access the http://localhost:30000/
+You will see the image below.
+
+![alt text](https://raw.githubusercontent.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/development/docs/frontend.png "Frontend")
 
 
 ### Verifying it Works
