@@ -167,6 +167,8 @@ These pages should also load on your web browser:
 To send records, please execute the python file for location-event-microservice
 [grpc-client](https://github.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/blob/development/modules/03-location-event-microservice/location-event-client-grpc.py)
 
+When running the grpc_client, please in the field userId try to insert valid data from API http://127.0.0.1:30001/api/persons, which userId values are 100, 200, 300, 400, 500 and 600. **I am not validating the userId when send a request to location-event-microservice**. You may insert a new user and you will be able to test this new user
+
 #### Deployment Note
 You may notice the odd port numbers being served to `localhost`. [By default, Kubernetes services are only exposed to one another in an internal network](https://kubernetes.io/docs/concepts/services-networking/service/). This means that `udaconnect-app` and `udaconnect-api` can talk to one another. For us to connect to the cluster as an "outsider", we need to a way to expose these services to `localhost`.
 
