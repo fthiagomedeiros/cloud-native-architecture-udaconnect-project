@@ -124,9 +124,9 @@ For a better understanding, check the architectural diagram
 
 #### PERSON-MICROSERVICE
 1. Get into the '01-person-microservice' folder and run `$ kubectl apply -f deployment/`
-2. after you have the pods running, execute the script into `person-microservice/scripts/run_db_command.sh` with the pod identifier
-    `sh /person-microservice/scripts/run_db_command.sh <POSTGRES_DB_POD_NAME>`. 
-   The step 2 will populate the postgres database **_(The pod name should be something like (postgres-person-xxxxxid-pod))_**
+2. When the pods are running, execute the script located in `person-microservice/scripts/run_db_command.sh` with the pod identifier
+    `sh /scripts/run_db_command.sh <POSTGRES_DB_POD_NAME>`
+   The step 2 will populate the postgres database **_(The pod name will be something like (postgres-person-xxxxxid-pod))_**
 3. Access the http://localhost:30001/api/persons for testing
 
 ![alt text](https://github.com/fthiagomedeiros/cloud-native-architecture-udaconnect-project/blob/master/docs/person-pod-db-script-execution.png "See database script")
@@ -134,7 +134,7 @@ For a better understanding, check the architectural diagram
 #### CONNECTION-MICROSERVICE
 1. Get into the '02-connection-microservice' folder and run `$ kubectl apply -f deployment/`
 2. after you have the pods running, execute the script into person-microservice/scripts/run_db_command.sh with the pod identifier
-    `sh /connection-microservice/scripts/run_db_command.sh <POSTGRES_DB_POD_NAME>`. **_(The pod name should be something like (postgres-geoconnections-xxxxxid-pod))_**
+    `sh /connection-microservice/scripts/run_db_command.sh <POSTGRES_DB_POD_NAME>`. **_(The pod name will be something like (postgres-geoconnections-xxxxxid-pod))_**
    The step 2 will populate the postgres database
 3. Access the `http://localhost:30002/api/persons/600/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5` for testing
 4. You will not see any response once we have no records yet into database
