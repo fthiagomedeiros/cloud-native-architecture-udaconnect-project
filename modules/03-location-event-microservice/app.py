@@ -3,7 +3,7 @@ import os
 from flask import Flask, jsonify, g, request, Response
 from kafka import KafkaProducer
 
-from services import publish_location
+from api.services import publish_location
 
 app = Flask(__name__)
 
