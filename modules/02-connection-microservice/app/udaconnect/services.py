@@ -3,13 +3,11 @@ from datetime import datetime, timedelta
 from typing import Dict, List
 
 import requests
-from geoalchemy2.functions import ST_Point
 from sqlalchemy.sql import text
 
 from app import db
 from app.config import PERSON_SERVICE_ENDPOINT
 from app.udaconnect.models import Connection, Location, Person
-from app.udaconnect.schemas import LocationSchema
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("udaconnect-api")
@@ -33,7 +31,7 @@ class ConnectionService:
         ).all()
 
         # Cache all users in memory for quick lookup
-        person_map: Dict[str, Person] = {person.id: person for person in PersonService.retrieve_all()}
+        person_map: Dict[str, Person] = {person.id: person for person in request_people_list()}
 
         # Prepare arguments for queries
         data = []
@@ -84,50 +82,17 @@ class ConnectionService:
         return result
 
 
-class LocationService:
-    @staticmethod
-    def retrieve(location_id) -> Location:
-        location, coord_text = (
-            db.session.query(Location, Location.coordinate.ST_AsText())
-                .filter(Location.id == location_id)
-                .one()
-        )
+def request_people_list() -> List[Person]:
+    list_of_people = []
+    persons = requests.get(PERSON_SERVICE_ENDPOINT + "api/persons")
+    persons = persons.json()
 
-        # Rely on database to return text form of point to reduce overhead of conversion in app code
-        location.wkt_shape = coord_text
-        return location
+    for each in persons:
+        p = Person()
+        p.id = each['id']
+        p.first_name = each['first_name']
+        p.last_name = each['last_name']
+        p.company_name = each['company_name']
+        list_of_people.append(p)
 
-    @staticmethod
-    def create(location: Dict) -> Location:
-        validation_results: Dict = LocationSchema().validate(location)
-        if validation_results:
-            logger.warning(f"Unexpected data format in payload: {validation_results}")
-            raise Exception(f"Invalid payload: {validation_results}")
-
-        new_location = Location()
-        new_location.person_id = location["person_id"]
-        new_location.creation_time = location["creation_time"]
-        new_location.coordinate = ST_Point(location["latitude"], location["longitude"])
-        db.session.add(new_location)
-        db.session.commit()
-
-        return new_location
-
-
-class PersonService:
-    @staticmethod
-    def retrieve_all() -> List[Person]:
-        list_of_people = []
-        persons = requests.get(PERSON_SERVICE_ENDPOINT + "api/persons")
-        persons = persons.json()
-
-        for each in persons:
-            p = Person()
-            p.id = each['id']
-            p.first_name = each['first_name']
-            p.last_name = each['last_name']
-            p.company_name = each['company_name']
-            list_of_people.append(p)
-
-        # return db.session.query(Person).all()
-        return list_of_people
+    return list_of_people

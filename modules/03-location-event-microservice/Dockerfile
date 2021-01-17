@@ -1,11 +1,11 @@
 FROM python:3.8
 
-WORKDIR .
+WORKDIR /src
 
-COPY . .
+COPY . /src
 RUN pip install -r requirements.txt
 
-EXPOSE 5005
+EXPOSE 5000
 
 COPY . .
-ENTRYPOINT ["python", "grpc_server_startup.py"]
+ENTRYPOINT ["flask", "run", "--host", "0.0.0.0"]
