@@ -31,8 +31,8 @@ spec:
         service: person-svc-api
     spec:
       containers:
-      - image: fthiagomedeiros/person-service-api:latest
-        name: person-service-api
+      - image: fthiagomedeiros/person-rest-service-api:latest
+        name: person-rest-service-api
         imagePullPolicy: Always
         env:
         - name: DB_USERNAME
